@@ -17,20 +17,18 @@ The shell can:
 - child executes program
 - parent waits
 - repeat forever
-*/
 
 
-/*
 Basic process flow
 
 Shell process
 [+] User executed a command (fork())
-|- Child process
+|->>>> Child process
+
 [+] Shell process wait() 
 [-] Child process executed (execve()) and killed
-[+] Back to user process 
-[0] back to Shell process
 
+[0] back to Shell process
 */
 
 void callfunction(char* argc, char* argv[]){
