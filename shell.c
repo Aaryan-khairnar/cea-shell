@@ -31,13 +31,13 @@ Shell process
 [0] back to Shell process
 */
 
-void callfunction(char* argc, char* argv[]){
+void callfunction(char* argv[]){
 
     int id = fork();
 
     if(id == 0){
         //child process
-        execvp(argc, argv);
+        execvp(argv[0], argv);
         perror("exec failed");
         exit(1);
     } else{
@@ -51,7 +51,7 @@ int main(){
     while(1){  //infinite loop
         char input[100];
         
-        printf("cshell > "); 
+        printf(" OwO > "); 
         fgets(input, sizeof(input), stdin);   // this parses the whole line into a string called input
         input[strcspn(input, "\n")] = 0;      // this removes the newline character at the end of input string
 
@@ -71,15 +71,19 @@ int main(){
         
         command[i] = NULL;  // Last token given NULL value because that is what callfunction() accepts
 
-        if (strcmp(command[0], "cd") == 0){ // special functionality of cd command
+        if (strcmp(command[0], "cd") == 0){ 
+            int chdir_success;
             if(command[1] == NULL){
-                chdir(getenv("HOME"));
+                chdir_success = chdir(getenv("HOME"));  
+            } else {
+                chdir_success = chdir(command[1]);
             }
-            chdir(command[1]);
+            if (chdir_success == -1) { 
+            printf("No such file or directory\n"); 
+            }
             continue;
         }
-
-        callfunction(command[0], command);  // finally calling function
+        callfunction(command);  // finally calling function
     }
 
     return 0;
